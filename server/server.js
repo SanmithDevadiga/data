@@ -2,7 +2,7 @@ import cors from 'cors';
 import dotenv from "dotenv";
 import express from "express";
 import connectDB from "./config/db.js";
-import { connectRedis } from './config/redis.js';
+// import { connectRedis } from './config/redis.js';
 import cardRoutes from "./routes/cardRoutes.js";
 
 dotenv.config();
@@ -20,7 +20,7 @@ app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
 connectDB();
-await connectRedis();
+// await connectRedis();
 
 app.use("/api", cardRoutes);
 

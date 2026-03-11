@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import AddCardModal from "../components/AddCardModal";
-import CardItem from "../components/CardItem"; // <-- Import the new CardItem component
+import CardItem from "../components/CardItem"; 
 import { useCardStore } from "../store/cardStore";
 
 export default function Home() {
@@ -12,42 +12,67 @@ export default function Home() {
   }, [fetchCards]);
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
-      
-      {/* Header Section */}
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">My Cards</h1>
+    <div className="font-sans text-gray-900">
+      {/* Hero Section */}
+      <section className="relative bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-20 px-6 text-center">
+        <h1 className="text-4xl md:text-6xl font-extrabold mb-4">
+          Welcome to Your Card Hub
+        </h1>
+        <p className="text-lg md:text-xl mb-8 max-w-2xl mx-auto">
+          Organize, manage, and create your cards efficiently. Everything you need at your fingertips.
+        </p>
         <button
           onClick={() => setShowModal(true)}
-          className="px-4 py-2 bg-blue-600 text-white font-medium rounded-lg 
-                     hover:bg-blue-700 transition-colors shadow-sm hover:shadow-md"
+          className="px-6 py-3 bg-white text-blue-600 font-bold rounded-lg shadow-lg hover:bg-gray-100 transition-all"
         >
-          + New Card
+          + Create New Card
         </button>
-      </div>
+      </section>
 
-      {/* Card List */}
-      {cards.length === 0 ? (
-        // Empty State
-        <div className="text-center py-20 bg-gray-50 rounded-xl border border-dashed border-gray-300">
-          <p className="text-gray-500 mb-4">No cards found yet.</p>
+      {/* Cards Section */}
+      <section className="py-16 px-6 max-w-7xl mx-auto">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-3xl font-bold text-gray-800">My Cards</h2>
           <button
             onClick={() => setShowModal(true)}
-            className="text-blue-600 font-medium hover:underline"
+            className="px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors shadow-sm hover:shadow-md"
           >
-            Create your first card
+            + New Card
           </button>
         </div>
-      ) : (
-        // Responsive Grid layout
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {cards.map((card) => (
-            <CardItem key={card._id} card={card} />
-          ))}
-        </div>
-      )}
 
-      {/* Modal — only renders when showModal is true */}
+        {cards.length === 0 ? (
+          <div className="text-center py-20 bg-gray-50 rounded-xl border border-dashed border-gray-300">
+            <p className="text-gray-500 mb-4">No cards found yet.</p>
+            <button
+              onClick={() => setShowModal(true)}
+              className="text-blue-600 font-medium hover:underline"
+            >
+              Create your first card
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {cards.map((card) => (
+              <CardItem key={card._id} card={card} />
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-16 px-6 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-center rounded-xl max-w-7xl mx-auto my-10">
+        <h3 className="text-3xl font-bold mb-4">Ready to get started?</h3>
+        <p className="mb-6 text-lg">Create your first card and see how easy it is to stay organized.</p>
+        <button
+          onClick={() => setShowModal(true)}
+          className="px-6 py-3 bg-white text-indigo-600 font-bold rounded-lg shadow-lg hover:bg-gray-100 transition-all"
+        >
+          + Create Card Now
+        </button>
+      </section>
+
+      {/* Modal */}
       <AddCardModal
         isOpen={showModal}
         onClose={() => setShowModal(false)}

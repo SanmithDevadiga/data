@@ -2,15 +2,15 @@ import cardRepository from "../repositories/cardRepository.js";
 
 export const createCard = async (req, res) => {
   try {
-
     const { parentId, ...cardData } = req.body;
 
     const card = await cardRepository.createCard({
       ...cardData,
-      parentCard: parentId || null
+      parentCard: parentId || null,
     });
 
     if (parentId) {
+      // Use card._id (MongoDB ObjectId), NOT card.id (custom number)
       await cardRepository.addSubCard(parentId, card._id);
     }
 

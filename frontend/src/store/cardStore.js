@@ -1,4 +1,3 @@
-// store/cardStore.js
 import toast from "react-hot-toast";
 import { create } from "zustand";
 import api from "../api/axios";
@@ -32,7 +31,7 @@ export const useCardStore = create((set) => ({
   fetchChildCards: async (id) => {
     try {
       const res = await api.get(`/card/${id}/children`);
-      set({ childCards: res.data[0]?.children || [] });
+      set({ childCards: res.data.children || [] });
     } catch (err) {
       console.error("Fetch children error:", err);
       toast.error("Failed to load child cards");
@@ -42,7 +41,6 @@ export const useCardStore = create((set) => ({
   createCard: async (data, parentId = null) => {
     try {
       const res = await api.post("/card", { ...data, parentId });
-      console.log("Create response:", res.data);
       toast.success("Card created");
       return res.data;
     } catch (err) {
@@ -58,10 +56,34 @@ export const useCardStore = create((set) => ({
       toast.success("Deleted");
       set((state) => ({
         cards: state.cards.filter((c) => c._id !== id),
+        childCards: state.childCards.filter((c) => c._id !== id),
       }));
     } catch (err) {
       console.error("Delete error:", err);
       toast.error("Delete failed");
+    }
+  },
+
+  // ✅ NEW: updateCard function
+  updateCard: async (id, data) => {
+    try {
+      const res = await api.put(`/card/${id}`, data);
+      toast.success("Card updated");
+
+      // Update cardDetails if currently viewing this card
+      set((state) => ({
+        cardDetails: state.cardDetails?._id === id ? res.data : state.cardDetails,
+        // Update the card in cards array
+        cards: state.cards.map((c) => (c._id === id ? res.data : c)),
+        // Update the card in childCards array
+        childCards: state.childCards.map((c) => (c._id === id ? res.data : c)),
+      }));
+
+      return res.data;
+    } catch (err) {
+      console.error("Update card error:", err.response?.data || err.message);
+      toast.error(err.response?.data?.error || "Update failed");
+      throw err;
     }
   },
 }));
