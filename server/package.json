@@ -1,7 +1,7 @@
 {
   "type": "module",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "nodemon index.js",
     "build": "echo 'No build needed for backend'"
   },
   "dependencies": {
